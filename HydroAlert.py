@@ -22,6 +22,7 @@ def remindToDrinkWater(interval, waterGoal):
 def main():
     print("Welcome to the Water Reminder Program!")
     weight = float(input("Enter your weight in kilograms: "))
+    weather= string (input("Enter the your city nearest to you"))
     interval = float(input("Enter the time interval between reminders (in minutes): "))
     
     waterGoal = weight * mlPerKg
