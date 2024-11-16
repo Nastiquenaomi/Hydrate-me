@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, 'Public')));
 
 app.get('/',(req, res)=> {
-    res.sendFile(path.join(__dirname, 'Public','index.html'));
+    res.sendFile(path.join(__dirname, 'Public','homepage.html'));
 });
 
 // Configure session management
