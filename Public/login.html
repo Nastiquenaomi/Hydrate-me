@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hydrate Me - Login</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="login.css">
 </head>
 <body>
   <div class="container">
@@ -14,7 +14,11 @@
       <input type="password" id="password" placeholder="Password" required>
       <button type="submit">Login</button>
     </form>
-    <p id="message"></p>
+    <!-- For navigation to the signup page -->
+    <div class="alternate-action">
+      <p>Don't have an account?</p>
+      <button onclick="window.location.href='signup.html'">Sign Up</button>
+    </div>  
   </div>
   <script src="login.js"></script>
 </body>

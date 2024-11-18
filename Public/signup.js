@@ -1,13 +1,25 @@
 const form = document.getElementById('signupForm');
-const responseMessage = document.getElementById('responseMessage');
+const message = document.getElementById('message');
 
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
-  
+
+  const username = form.username.value;
+  const email = form.email.value;
+  const password = form.password.value;
+  const confirmPassword = form.confirmPassword.value;
+
+  // Validate if passwords match
+  if (password !== confirmPassword) {
+    message.textContent = "Passwords do not match!";
+    message.style.color = 'red';
+    return;
+  }
+
   const formData = {
-    username: form.username.value,
-    email: form.email.value,
-    password: form.password.value,
+    username,
+    email,
+    password,
   };
 
   try {
@@ -17,16 +29,18 @@ form.addEventListener('submit', async (event) => {
       body: JSON.stringify(formData),
     });
 
-    const message = await response.text();
-    responseMessage.textContent = message;
+    const responseMessage = await response.text();
+    message.textContent = responseMessage;
 
     if (response.ok) {
-      responseMessage.style.color = 'green';
+      message.style.color = 'green';
+      // Optionally, redirect to login after successful signup
+      window.location.href = '/login.html';
     } else {
-      responseMessage.style.color = 'red';
+      message.style.color = 'red';
     }
   } catch (error) {
-    responseMessage.textContent = 'An error occurred. Please try again.';
-    responseMessage.style.color = 'red';
+    message.textContent = 'An error occurred. Please try again.';
+    message.style.color = 'red';
   }
 });

@@ -95,3 +95,25 @@ p#message {
     font-size: 0.9rem;
   }
 }
+
+.alternate-action {
+  margin-top: 20px;
+}
+
+.alternate-action p {
+  font-size: 14px;
+  color: #555;
+}
+
+.alternate-action button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.alternate-action button:hover {
+  background-color: #218838;
+}
