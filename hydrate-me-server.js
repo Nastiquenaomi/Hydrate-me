@@ -49,72 +49,14 @@ app.get('/result', (req, res) => {
 app.get('/signup', (req, res) => {
   res.render('signup');
 });
-
-app.post('/signup', async (req, res) => {
-    
-    const data = {
-        name: req.body.name,
-        password: req.body.password
-    }
   
-    const checking = await LogInCollection.findOne({ name: req.body.name })
-  
-   try{
-    if (checking.name === req.body.name && checking.password===req.body.password) {
-        res.send("user details already exists")
-    }
-    else{
-        await LogInCollection.insertMany([data])
-    }
-   }
-   catch{
-    res.send("wrong inputs")
-   }
-  
-    res.status(201).render("home", {
-        naming: req.body.name
-    })
-  })
-  
-
-
-// Replace with your OpenWeatherMap API Key
-const WEATHER_API_KEY = process.env.WEATHER_API_KEY || 'f2c2661603d8f96757a81b3cfdd73892';
-
-// Helper function to fetch temperature
-async function fetchTemperature(city) {
-    try {
-        const response = await axios.get(
-            `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${WEATHER_API_KEY}&units=metric`
-        );
-        return response.data.main.temp;
-    } catch (error) {
-        console.error('Error fetching temperature:', error);
-        return null;
-    }
-}
-
-// Calculate water goal based on weight and temperature
-function calculateWaterGoal(weight, temperature) {
-    let Waterlog;
-    if (weight <= 30) {
-        Waterlog = temperature > 23 ? 2.0 : (temperature > 20 ? 1.8 : 1.6);
-    } else if (weight <= 50) {
-        Waterlog = temperature > 23 ? 2.2 : (temperature > 20 ? 2.0 : 1.8);
-    } else if (weight <= 80) {
-        Waterlog = temperature > 23 ? 2.4 : (temperature > 20 ? 2.2 : 2.0);
-    } else {
-        Waterlog = temperature > 23 ? 2.6 : (temperature > 20 ? 2.4 : 2.2);
-    }
-    return Waterlog * 1000; // Convert to ml
-}
 
 // **Sign-Up Route**
 app.post('/signup', async (req, res) => {
-    const { email, password, confirmPassword } = req.body;
+    const { username, email, password, confirmPassword } = req.body;
 
     // Validate input
-    if (!email || !password || !confirmPassword) {
+    if (!username || !email || !password || !confirmPassword) {
         return res.status(400).send("All fields are required!");
     }
 
@@ -135,6 +77,7 @@ app.post('/signup', async (req, res) => {
 
         // Insert user into the database
         const newUser = new LogInCollection({
+            username,
             email,
             password: hashedPassword,
         });
@@ -178,6 +121,39 @@ app.post('/login', async (req, res) => {
         res.status(500).send("Internal server error.");
     }
 });
+
+
+// Replace with your OpenWeatherMap API Key
+const WEATHER_API_KEY = process.env.WEATHER_API_KEY || 'f2c2661603d8f96757a81b3cfdd73892';
+
+// Helper function to fetch temperature
+async function fetchTemperature(city) {
+    try {
+        const response = await axios.get(
+            `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${WEATHER_API_KEY}&units=metric`
+        );
+        return response.data.main.temp;
+    } catch (error) {
+        console.error('Error fetching temperature:', error);
+        return null;
+    }
+}
+
+// Calculate water goal based on weight and temperature
+function calculateWaterGoal(weight, temperature) {
+    let Waterlog;
+    if (weight <= 30) {
+        Waterlog = temperature > 23 ? 2.0 : (temperature > 20 ? 1.8 : 1.6);
+    } else if (weight <= 50) {
+        Waterlog = temperature > 23 ? 2.2 : (temperature > 20 ? 2.0 : 1.8);
+    } else if (weight <= 80) {
+        Waterlog = temperature > 23 ? 2.4 : (temperature > 20 ? 2.2 : 2.0);
+    } else {
+        Waterlog = temperature > 23 ? 2.6 : (temperature > 20 ? 2.4 : 2.2);
+    }
+    return Waterlog * 1000; // Convert to ml
+}
+
 
 // Route to calculate water goal based on location
 app.post('/calculate-water-goal', async (req, res) => {

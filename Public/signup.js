@@ -1,7 +1,8 @@
 const form = document.getElementById('signupForm');
-const message = document.getElementById('message');
+const message = document.getElementById('responsemessage');
 
 form.addEventListener('submit', async (event) => {
+  console.log('Form Submitted'); // This will help check if the event is firing
   event.preventDefault();
 
   const username = form.username.value;
@@ -35,7 +36,7 @@ form.addEventListener('submit', async (event) => {
     if (response.ok) {
       message.style.color = 'green';
       // Optionally, redirect to login after successful signup
-      window.location.href = '/login.html';
+      window.location.href = '/register';
     } else {
       message.style.color = 'red';
     }
