@@ -1,14 +1,19 @@
 const express = require('express');
 const cors = require('cors');
-const mysql = require('mysql2/promise');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 const axios = require('axios');
 const bodyParser = require('body-parser');
 const path = require('path');
+require('dotenv').config();
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// MongoDB connection URI
+const uri = process.env.MONGO_URI; // Store in .env file
+const client = new MongoClient(uri);
 
 app.use(express.static(path.join(__dirname, 'Public')));
 
@@ -108,3 +113,8 @@ app.post('/calculate-water-goal', async(req, res) => {
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
+
+//mongodb+srv://groupadmin:cluster0password@cluster0.a354u.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+
+//cluster0password
