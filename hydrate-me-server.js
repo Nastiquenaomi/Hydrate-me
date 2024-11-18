@@ -49,7 +49,7 @@ app.get('/result', (req, res) => {
 app.get('/signup', (req, res) => {
   res.render('signup');
 });
-  
+
 
 // **Sign-Up Route**
 app.post('/signup', async (req, res) => {
@@ -121,6 +121,7 @@ app.post('/login', async (req, res) => {
         res.status(500).send("Internal server error.");
     }
 });
+
 
 
 // Replace with your OpenWeatherMap API Key
