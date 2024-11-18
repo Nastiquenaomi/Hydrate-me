@@ -38,6 +38,7 @@ app.get('/login', (req, res) => {
   res.render('login');
 });
 
+
 app.get('/register', (req, res) => {
   res.render('register');
 });
@@ -49,6 +50,33 @@ app.get('/result', (req, res) => {
 app.get('/signup', (req, res) => {
   res.render('signup');
 });
+
+app.post('/signup', async (req, res) => {
+    
+  const data = {
+      name: req.body.name,
+      password: req.body.password
+  }
+
+  const checking = await LogInCollection.findOne({ name: req.body.name })
+
+ try{
+  if (checking.name === req.body.name && checking.password===req.body.password) {
+      res.send("user details already exists")
+  }
+  else{
+      await LogInCollection.insertMany([data])
+  }
+ }
+ catch{
+  res.send("wrong inputs")
+ }
+
+  res.status(201).render("home", {
+      naming: req.body.name
+  })
+})
+
 
 
 
