@@ -13,12 +13,19 @@ mongoose
   });
 
 // Define the Login Schema
-const logInSchema = new mongoose.Schema({
+const signUpSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+
   email: {
     type: String,
     required: true,
     unique: true, // Ensure each email is unique
   },
+
   password: {
     type: String,
     required: true,
@@ -26,7 +33,7 @@ const logInSchema = new mongoose.Schema({
 });
 
 // Create the Login Collection
-const LogInCollection = mongoose.model("LogInCollection", logInSchema);
+const collections = mongoose.model("users", signUpSchema);
 
 // Export the Model
-module.exports = LogInCollection;
+module.exports = collections;

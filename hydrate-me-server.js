@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
-const LogInCollection = require("./db"); // Updated to use the correct MongoDB model
+const collections = require("./db"); // Updated to use the correct MongoDB model
 const session = require('express-session');
 const axios = require('axios');
 const bodyParser = require('body-parser');
@@ -17,6 +17,9 @@ app.use(cors());
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
 
 
 // Configure session management
@@ -47,48 +50,48 @@ app.get('/result', (req, res) => {
 });
 
 app.get('/signup', (req, res) => {
-  res.render('signup');
+  res.render('signup', { userExists: false , emailExists: false});
 });
 
 
+// **Sign-Up Route**     
 // **Sign-Up Route**
 app.post('/signup', async (req, res) => {
-    const { username, email, password, confirmPassword } = req.body;
-
-    // Validate input
-    if (!username || !email || !password || !confirmPassword) {
-        return res.status(400).send("All fields are required!");
-    }
-
-    // Ensure password matches confirm password
-    if (password !== confirmPassword) {
-        return res.status(400).send("Passwords do not match!");
-    }
+    const data = {
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password
+    };
 
     try {
-        // Check if user already exists
-        const existingUser = await LogInCollection.findOne({ email });
+        // Check if username already exists
+        const existingUser = await collections.findOne({ username: data.username });
+
+        // Check if email already exists
+        const existingEmail = await collections.findOne({ email: data.email });
+
         if (existingUser) {
-            return res.status(400).send("Email already exists!");
+            // Username exists
+            return res.render('signup', { userExists: true, emailExists: false }); 
         }
 
-        // Hash password
-        const hashedPassword = await bcrypt.hash(password, 10);
+        if (existingEmail) {
+            // Email exists
+            return res.render('signup', { userExists: false, emailExists: true }); 
+        }
 
         // Insert user into the database
-        const newUser = new LogInCollection({
-            username,
-            email,
-            password: hashedPassword,
-        });
+        const newUser = await collections.insertOne(data); // Use `insertOne` for single documents
+        console.log('New User Created:', newUser);
 
-        await newUser.save();
-        res.status(201).send("User registered successfully!");
+        // Redirect or respond after successful signup
+        res.redirect('/register'); // Change '/success' to the desired route after signup
     } catch (error) {
-        console.error("Error signing up user:", error);
-        res.status(500).send("Internal server error.");
+        console.error('Error during signup:', error);
+        res.status(500).send('Internal Server Error');
     }
 });
+
 
 // **Login Route**
 app.post('/login', async (req, res) => {
@@ -101,7 +104,7 @@ app.post('/login', async (req, res) => {
 
     try {
         // Find user by email
-        const user = await LogInCollection.findOne({ email });
+        const user = await collections.findOne({ email });
         if (!user) {
             return res.status(400).send("Invalid email or password!");
         }
