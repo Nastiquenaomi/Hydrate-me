@@ -50,46 +50,82 @@ app.get('/result', (req, res) => {
 });
 
 app.get('/signup', (req, res) => {
-  res.render('signup', { userExists: false , emailExists: false});
+  res.render('signup', { userExists: false , emailExists: false, passwordMatch: true});
 });
 
 
-// **Sign-Up Route**     
 // **Sign-Up Route**
 app.post('/signup', async (req, res) => {
     const data = {
         username: req.body.username,
         email: req.body.email,
-        password: req.body.password
+        password: req.body.password, 
+        confirmPassword: req.body.confirmPassword
     };
+  
 
-    try {
         // Check if username already exists
         const existingUser = await collections.findOne({ username: data.username });
 
         // Check if email already exists
         const existingEmail = await collections.findOne({ email: data.email });
 
-        if (existingUser) {
+        const passwordMatch = (data.password == data.confirmPassword);
+
+        if (existingUser && existingEmail && passwordMatch) {
             // Username exists
-            return res.render('signup', { userExists: true, emailExists: false }); 
+            return res.render('signup', { userExists: true, emailExists: true, passwordMatch: true }); 
+        }     
+
+        else if (!existingUser && existingEmail && passwordMatch) {
+            // Username exists
+            return res.render('signup', { userExists: false, emailExists: true, passwordMatch: true }); 
         }
 
-        if (existingEmail) {
-            // Email exists
-            return res.render('signup', { userExists: false, emailExists: true }); 
+        else if (existingUser && !existingEmail && passwordMatch) {
+            // Username exists
+            return res.render('signup', { userExists: true, emailExists: false, passwordMatch: true }); 
         }
 
+        else if (existingUser && existingEmail && !passwordMatch) {
+            // Username exists
+            return res.render('signup', { userExists: true, emailExists: true, passwordMatch: false }); 
+        }
+
+        else if (!existingUser && !existingEmail && !passwordMatch) {
+            // Username exists
+            return res.render('signup', { userExists: false, emailExists: false, passwordMatch: false }); 
+        }
+        
+
+        else if (existingUser && !existingEmail && !passwordMatch) {
+            // Username exists
+            return res.render('signup', { userExists: true, emailExists: false, passwordMatch: false }); 
+        }
+
+        else if (!existingUser && existingEmail && !passwordMatch) {
+            // Username exists
+            return res.render('signup', { userExists: false, emailExists: true, passwordMatch: false }); 
+        }
+
+        else{
+       // Hash the password before saving it to the database
+       const hashedPassword = await bcrypt.hash(data.password, 10); // 10 is the salt rounds
+        
+       refinedData = {
+        username: data.username,
+        email: data.email,
+        password: hashedPassword    
+       }
         // Insert user into the database
-        const newUser = await collections.insertOne(data); // Use `insertOne` for single documents
+        const newUser = await collections.insertMany(refinedData);
+        
         console.log('New User Created:', newUser);
 
         // Redirect or respond after successful signup
-        res.redirect('/register'); // Change '/success' to the desired route after signup
-    } catch (error) {
-        console.error('Error during signup:', error);
-        res.status(500).send('Internal Server Error');
-    }
+        res.redirect('/register'); 
+        }
+
 });
 
 

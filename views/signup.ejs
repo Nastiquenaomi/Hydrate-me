@@ -7,26 +7,16 @@
   <link rel="stylesheet" href="signup.css">
 </head>
 <body>
+  <div class="full-screen-container">
   <div class="signup-container">
-    <h1>Sign Up</h1>
-    <form action="/signup" method="post" id="signupForm">
+    <h1 class="signup-title">Sign Up</h1>
+    <form action="/signup" method="post" id="signupForm" class="form">
+      
       <label for="username">Username:</label>
       <input type="text" id="username" name="username" required>
       <p id="userExistsMessage" style="display: none;">Username already exists!</p>
 
-      <% if (userExists) { %>
-      <script>
-        // Function to show the message in red
-        function showUserExistsMessage() {
-            const messageElement = document.getElementById('userExistsMessage');
-            messageElement.style.display = 'block'; // Make it visible
-            messageElement.style.color = 'red'; // Change text color to red
-        }
-    
-        // Example usage (trigger this when the user already exists)
-        showUserExistsMessage();
-    </script>
-    <%}%>
+ 
 
 
 
@@ -35,19 +25,7 @@
 
       <p id="emailExistsMessage" style="display: none;">Email already exists!</p>
 
-      <% if (emailExists) { %>
-        <script>
-          // Function to show the message in red
-          function showEmailExistsMessage() {
-              const messageElement = document.getElementById('emailExistsMessage');
-              messageElement.style.display = 'block'; // Make it visible
-              messageElement.style.color = 'red'; // Change text color to red
-          }
-      
-          // Example usage (trigger this when the user already exists)
-          showEmailExistsMessage();
-      </script>
-      <%}%>
+
       
       <label for="password">Password:</label>
       <input type="password" id="password" name="password" required>
@@ -55,10 +33,71 @@
       <label for="confirmPassword">Confirm Password:</label>  
       <input type="password" id="confirmPassword" name="confirmPassword" required>
 
+      <p id="passwordMatchMessage" style="display: none;">Passwords do not match!</p>
 
-      <button type="submit">Sign Up</button>
+
+      <button type="submit" class="signup-button">Sign Up</button>
     </form>
     <p id="responseMessage"></p>
   </div>
+</div>
+</div>
+
+<% if (userExists) { %>
+  <script>
+    // Function to show the message in red
+    function showUserExistsMessage() {
+        const messageElement = document.getElementById('userExistsMessage');
+        messageElement.style.display = 'block'; // Make it visible
+        messageElement.style.color = 'red'; // Change text color to red
+    }
+
+    // Example usage (trigger this when the user already exists)
+    showUserExistsMessage();
+</script>
+<%}%>
+
+<% if (emailExists) { %>
+  <script>
+    // Function to show the message in red
+    function showEmailExistsMessage() {
+        const messageElement = document.getElementById('emailExistsMessage');
+        messageElement.style.display = 'block'; // Make it visible
+        messageElement.style.color = 'red'; // Change text color to red
+    }
+
+    // Example usage (trigger this when the user already exists)
+    showEmailExistsMessage();
+</script>
+<%}%>
+
+<% if (!passwordMatch) { %>
+  <script>
+    // Function to show the message in red
+    function showPasswordMatchMessage() {
+        const messageElement = document.getElementById('passwordMatchMessage');
+        messageElement.style.display = 'block'; // Make it visible
+        messageElement.style.color = 'red'; // Change text color to red
+    }
+
+    // Example usage (trigger this when the user already exists)
+    showPasswordMatchMessage();
+</script>
+<%}%>
+
+<% if (emailExists) { %>
+  <script>
+    // Function to show the message in red
+    function showEmailExistsMessage() {
+        const messageElement = document.getElementById('emailExistsMessage');
+        messageElement.style.display = 'block'; // Make it visible
+        messageElement.style.color = 'red'; // Change text color to red
+    }
+
+    // Example usage (trigger this when the user already exists)
+    showEmailExistsMessage();
+</script>
+<%}%>
+
 </body>
 </html>
