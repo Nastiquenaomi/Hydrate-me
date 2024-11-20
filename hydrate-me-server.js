@@ -7,6 +7,8 @@ const axios = require('axios');
 const bodyParser = require('body-parser');
 const path = require('path');
 require('dotenv').config();
+const sound = require("sound-play");
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -201,7 +203,8 @@ app.post('/calculator', async (req, res) => {
     }
 
     // Replace with actual weight logic (e.g., stored in session or DB)
-    const userWeight = req.body.weight; // Example static weight
+    const userWeight = req.body.weight;
+    const userInterval = req.body.interval;
     const waterGoal = calculateWaterGoal(userWeight, temperature);
     res.render('calculator',{waterGoalValue: waterGoal});
 });

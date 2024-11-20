@@ -9,7 +9,13 @@
 <body>
   <div class="full-screen-container">
   <div class="login-container">
-    <h1 style="color:yellow"><b>Let's Calculate Your Recommended Intake<b></h1>
+
+    <div class=".overlay">
+      <div class="form-content">
+    <h1  style="color:yellow"><b>Let's Calculate Your Recommended Intake<b></h1>
+    </div>
+    </div>
+
     <form action="/calculator" method="post" id="calculator" class="form">
       <input type="text" id="name"  name="name" placeholder="Full Name" required>
       <input type="number" id="age" name="age"  placeholder="Age" required>
@@ -17,7 +23,7 @@
       <input type="text" id="city" name="city" placeholder="City" required>
       <input type="number" id="weight" name="weight" placeholder="Weight (kg)" required>
       <input type="number" id="interval" name="interval"  placeholder="Interval (hours)" required>
-      <button type="submit">Register</button>
+      <button type="submit">Calculate</button>
       <h2 id="waterGoalMessage" style="display: none;">Your Recommended Daily Water Goal is !</h2>
     </form>
 
