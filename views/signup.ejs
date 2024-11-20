@@ -17,9 +17,6 @@
       <p id="userExistsMessage" style="display: none;">Username already exists!</p>
 
  
-
-
-
       <label for="email">Email:</label>
       <input type="email" id="email" name="email" required>
 
@@ -82,20 +79,6 @@
 
     // Example usage (trigger this when the user already exists)
     showPasswordMatchMessage();
-</script>
-<%}%>
-
-<% if (emailExists) { %>
-  <script>
-    // Function to show the message in red
-    function showEmailExistsMessage() {
-        const messageElement = document.getElementById('emailExistsMessage');
-        messageElement.style.display = 'block'; // Make it visible
-        messageElement.style.color = 'red'; // Change text color to red
-    }
-
-    // Example usage (trigger this when the user already exists)
-    showEmailExistsMessage();
 </script>
 <%}%>
 

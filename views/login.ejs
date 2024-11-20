@@ -7,19 +7,56 @@
   <link rel="stylesheet" href="login.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Login</h1>
-    <form action="/login" method="post" id="loginForm">
-      <input type="text" id="username" name="username" required>
+  <div class="full-screen-container">
+  <div class=",login-container">
+    <h1 class="login-title">Login</h1>
+    <form action="/login" method="post" id="loginForm" class="form">
+      <input type="email" id="email" name="email" required>
+      <p id="emailInvalidMessage" style="display: none;">Email is not registered!</p>
+
+
       <input type="password" id="password" name="password" required>
-      <button type="submit">Login</button>
+      <button class="login-button" type="submit">Login</button>
+      <p id="incorrectPasswordMessage" style="display: none;">Incorrect Password!</p>
+
+
     </form>
     <!-- For navigation to the signup page -->
     <div class="alternate-action">
-      <p>Don't have an account?</p>
+      <p><b>Don't have an account?<b></p>
       <button onclick="window.location.href='/signup'">Sign Up</button>
     </div>  
   </div>
-  <script src="login.js"></script>
+</div>
+
+  <% if (!emailExists) { %>
+    <script>
+      // Function to show the message in red
+      function showInvalidEmailMessage() {
+          const messageElement = document.getElementById('emailInvalidMessage');
+          messageElement.style.display = 'block'; // Make it visible
+          messageElement.style.color = 'red'; // Change text color to red
+      }
+  
+      // Example usage (trigger this when the user already exists)
+      showInvalidEmailMessage();
+  </script>
+  <%}%>
+  
+  <% if (!isPasswordCorrect) { %>
+    <script>
+      // Function to show the message in red
+      function showInvalidPasswordMessage() {
+          const messageElement = document.getElementById('incorrectPasswordMessage');
+          messageElement.style.display = 'block'; // Make it visible
+          messageElement.style.color = 'red'; // Change text color to red
+      }
+  
+      // Example usage (trigger this when the user already exists)
+      showInvalidPasswordMessage();
+  </script>
+  <%}%>
+  
+  
 </body>
 </html>

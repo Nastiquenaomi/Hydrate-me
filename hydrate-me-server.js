@@ -38,7 +38,7 @@ app.get('/location', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  res.render('login');
+  res.render('login', {emailExists: true, isPasswordCorrect: true});
 });
 
 app.get('/register', (req, res) => {
@@ -96,13 +96,13 @@ app.post('/signup', async (req, res) => {
             // Username exists
             return res.render('signup', { userExists: false, emailExists: false, passwordMatch: false }); 
         }
-        
+       
 
         else if (existingUser && !existingEmail && !passwordMatch) {
             // Username exists
             return res.render('signup', { userExists: true, emailExists: false, passwordMatch: false }); 
         }
-
+            
         else if (!existingUser && existingEmail && !passwordMatch) {
             // Username exists
             return res.render('signup', { userExists: false, emailExists: true, passwordMatch: false }); 
@@ -131,36 +131,30 @@ app.post('/signup', async (req, res) => {
 
 // **Login Route**
 app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
 
-    // Validate input
-    if (!email || !password) {
-        return res.status(400).send("All fields are required!");
-    }
-
-    try {
         // Find user by email
-        const user = await collections.findOne({ email });
-        if (!user) {
-            return res.status(400).send("Invalid email or password!");
-        }
+        const existingEmail = await collections.findOne({email: req.body.email});
 
         // Compare hashed passwords
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            return res.status(400).send("Invalid email or password!");
+        const correctPassword = await bcrypt.compare(req.body.password, existingEmail.password);
+    
+        if (!existingEmail && !isPasswordCorrect){
+            return res.render('login', {emailExists: false, isPasswordCorrect: false});
+        } 
+
+        if (!existingEmail) {
+            return res.render('login', {emailExists: false, isPasswordCorrect: true});
         }
+        
+        else if (!correctPassword) {
+            return res.render('login', {emailExists: true, isPasswordCorrect: false});
+        }
+        else {
 
-        // Store user in session
-        req.session.user = { email };
-
-        res.status(200).send("Login successful!");
-    } catch (error) {
-        console.error("Error logging in user:", error);
-        res.status(500).send("Internal server error.");
-    }
+        res.redirect("/register");
+        }
 });
-
+ 
 
 
 // Replace with your OpenWeatherMap API Key
