@@ -1,0 +1,107 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  :root {
+    --primary-light-hsl: 200, 100%, 91%;
+    --primary-hsl: 200, 100%, 50%;
+    --primary-dark-hsl: 200, 100%, 6%;
+    --success-hsl: 100, 60%, 50%;
+    --error-hsl: 0, 60%, 50%;
+  }
+  
+  body {
+    margin: 0;
+  }
+  
+  .full-screen-container {
+    background-image: url("new-water-in-a-bottle.jpg");
+    height: 100vh;
+    width: 100vw;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .login-container {
+    --color: hsl(var(--primary-dark-hsl), .7);
+    box-shadow: 0 0 15px 0 var(--color);
+    padding: 40px 30px;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 20px;
+  }
+
+  /* Heading */
+  h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  /* Form Styling */
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  /* Input Styling */
+  input[type="text"],
+  input[type="number"] {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 100%;
+    transition: border-color 0.3s ease-in-out;
+  }
+  
+  input[type="text"]:focus,
+  input[type="number"]:focus {
+    border-color: #4caf50;
+    outline: none;
+  }
+  
+  /* Button Styling */
+  button {
+    padding: 12px;
+    background-color: #4caf50;
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Message Styling */
+  #message {
+    font-size: 14px;
+    color: #e74c3c;
+    margin-top: 20px;
+  }
+  
+  /* Responsive Styling */
+  @media (max-width: 600px) {
+    .container {
+      padding: 20px;
+      width: 90%;
+    }
+    h1 {
+      font-size: 20px;
+    }
+    input[type="text"],
+    input[type="number"],
+    button {
+      font-size: 14px;
+    }
+  }
+  

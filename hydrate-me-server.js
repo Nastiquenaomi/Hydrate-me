@@ -41,8 +41,8 @@ app.get('/login', (req, res) => {
   res.render('login', {emailExists: true, isPasswordCorrect: true});
 });
 
-app.get('/register', (req, res) => {
-  res.render('register');
+app.get('/calculator', (req, res) => {
+  res.render('calculator', {waterGoalValue: 0});
 });
 
 app.get('/result', (req, res) => {
@@ -123,7 +123,7 @@ app.post('/signup', async (req, res) => {
         console.log('New User Created:', newUser);
 
         // Redirect or respond after successful signup
-        res.redirect('/register'); 
+        res.redirect('/calculator'); 
         }
 
 });
@@ -151,7 +151,7 @@ app.post('/login', async (req, res) => {
         }
         else {
 
-        res.redirect("/register");
+        res.redirect("/calculator");
         }
 });
  
@@ -190,25 +190,25 @@ function calculateWaterGoal(weight, temperature) {
 
 
 // Route to calculate water goal based on location
-app.post('/calculate-water-goal', async (req, res) => {
-    const { city } = req.body;
+app.post('/calculator', async (req, res) => {
+    console.log("something");
 
-    if (!req.session.user) {
-        return res.status(401).json({ message: 'Unauthorized. Please log in.' });
-    }
+    const {city} = req.body.city;
 
     const temperature = await fetchTemperature(city);
     if (temperature === null) {
-        return res.status(500).json({ message: 'Could not fetch temperature data.' });
+        console.log("Could not fetch temperature");
     }
 
     // Replace with actual weight logic (e.g., stored in session or DB)
-    const userWeight = 70; // Example static weight
+    const userWeight = req.body.weight; // Example static weight
     const waterGoal = calculateWaterGoal(userWeight, temperature);
-    res.json({ waterGoal });
+    res.render('calculator',{waterGoalValue: waterGoal});
 });
 
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server running on port http://localhost:${PORT}`);
 });
+
+

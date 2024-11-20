@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hydrate Me - Register</title>
+  <link rel="stylesheet" href="calculator.css">
+</head>
+<body>
+  <div class="full-screen-container">
+  <div class="login-container">
+    <h1 style="color:yellow"><b>Let's Calculate Your Recommended Intake<b></h1>
+    <form action="/calculator" method="post" id="calculator" class="form">
+      <input type="text" id="name"  name="name" placeholder="Full Name" required>
+      <input type="number" id="age" name="age"  placeholder="Age" required>
+      <input type="text" id="gender" name="gender"  placeholder="Gender" required>
+      <input type="text" id="city" name="city" placeholder="City" required>
+      <input type="number" id="weight" name="weight" placeholder="Weight (kg)" required>
+      <input type="number" id="interval" name="interval"  placeholder="Interval (hours)" required>
+      <button type="submit">Register</button>
+      <h2 id="waterGoalMessage" style="display: none;">Your Recommended Daily Water Goal is !</h2>
+    </form>
+
+  <% if (waterGoalValue) { %>
+
+  <h3 id="waterGoalMessage" style="color: black;">Your Recommended Daily Water Goal is <span id="waterGoalValue"><%= waterGoalValue %></span>milliliters!</h3>
+<% } %>
+</div>
+</div>
+
+</body>
+</html>
