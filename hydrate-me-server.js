@@ -55,6 +55,10 @@ app.get('/signup', (req, res) => {
   res.render('signup', { userExists: false , emailExists: false, passwordMatch: true});
 });
 
+app.get('/water-tracker', (req, res) => {
+    res.render('water-tracker');
+  });
+  
 
 // **Sign-Up Route**
 app.post('/signup', async (req, res) => {

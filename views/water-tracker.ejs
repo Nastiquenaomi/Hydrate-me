@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Water Tracker</title>
+</head>
+<body>
+  <h1>Water Tracker</h1>
+  <h3>Your Recommended Daily Water Goal is <%= waterGoalValue %> ml</h3>
+  <h3>You need to drink <%= waterPerInterval %> ml every <%= interval %> minutes.</h3>
+
+  <!-- Hidden audio element -->
+  <audio id="reminderSound" src="/sounds/reminder.mp3"></audio>
+
+  <script>
+    // Function to play the sound
+    function playReminderSound() {
+      const audio = document.getElementById('reminderSound');
+      audio.play().catch(error => console.error("Error playing audio:", error));
+    }
+
+    // Automatically reload the page every interval
+    const reloadIntervalMinutes = <%= interval %>;
+    setInterval(() => {
+      playReminderSound(); // Play the sound
+      location.reload();   // Reload the page
+    }, reloadIntervalMinutes * 60 * 1000); // Convert minutes to milliseconds
+
+    // Play the sound immediately when the page loads
+    playReminderSound();
+  </script>
+</body>
+</html>
