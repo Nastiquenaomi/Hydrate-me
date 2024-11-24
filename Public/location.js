@@ -1,10 +1,7 @@
-// Use your own OpenWeatherMap API Key below
-const apiKey = 'f2c2661603d8f96757a81b3cfdd73892';
 
 const error = document.getElementById('error');
 
-const units = 'metric'; //can be imperial or metric
-let temperatureSymobol = units == 'metric' ? "°C" : "°F";
+
 
         async function fetchWeather() {
             try {
@@ -13,7 +10,7 @@ let temperatureSymobol = units == 'metric' ? "°C" : "°F";
                 const cityInputtedByUser = document.getElementById('cityInput').value;
         
                 // Build API URL
-                const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityInputtedByUser}&appid=${apiKey}&units=${units}`;
+                const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityInputtedByUser}&appid=${apiKey}&units=metric`;
         
                 const response = await fetch(apiUrl);
                 const data = await response.json();
@@ -27,6 +24,16 @@ let temperatureSymobol = units == 'metric' ? "°C" : "°F";
        
                 // Display only the current temperature
                 const temperature = data.main.temp;
+            
+                // Send temperature to the server
+                await fetch('/set-temperature', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ temperature })
+                });
+
+                console.log(`Temperature sent to the server: ${temperature}`);
+  
         
             } catch (err) {
                 console.log(err);

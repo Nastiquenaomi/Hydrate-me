@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Reminder</title>
+    <style>
+        /* Add basic styling for the page */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f1f1f1;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        .reminder-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: inline-block;
+        }
+        .reminder-box p {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Water Reminder</h1>
+    
+    <div class="reminder-box">
+        <p>Temperature: <strong><%= temperature %>°C</strong></p>
+        <p>Interval: <strong><%= interval %> minutes</strong></p>
+        <p>Water Goal: <strong><%= waterGoalValue %> mL</strong></p>
+    </div>
+
+    <button id="setReminderButton">Set Alarm Reminder</button>
+
+    <script>
+        let intervalReminder = <%= interval %>*10; // Convert minutes to milliseconds
+        let waterGoalValueReminder = <%= waterGoalValue %>;
+
+
+        // Set a timer to remind the user about their water intake
+        document.getElementById('setReminderButton').addEventListener('click', function () {
+
+            setInterval(function () {
+                alert('Time to drink ' + waterGoalValueReminder + ' mL of water!');
+                // Play a sound or display an alarm notification if needed
+                new Audio('/Alarm-Clock-Sound.mp3').play(); // Assuming you have a sound file in your public directory
+            }, intervalReminder);
+        });
+    </script>
+</body>
+</html>

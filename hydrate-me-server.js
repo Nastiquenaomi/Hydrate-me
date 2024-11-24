@@ -44,8 +44,9 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/calculator', (req, res) => {
-  res.render('calculator', {waterGoalValue: 0});
+    res.render('calculator', { waterGoalValue: 0, temperature: currentTemperature });
 });
+
 
 app.get('/result', (req, res) => {
   res.render('result');
@@ -55,9 +56,13 @@ app.get('/signup', (req, res) => {
   res.render('signup', { userExists: false , emailExists: false, passwordMatch: true});
 });
 
-app.get('/water-tracker', (req, res) => {
-    res.render('water-tracker');
-  });
+app.get('/reminder', (req, res) => {
+    res.render('reminder', { 
+        waterGoalValue: waterGoalValue, 
+        temperature: currentTemperature, 
+        interval: userInterval 
+    });  
+});
   
 
 // **Sign-Up Route**
@@ -161,23 +166,24 @@ app.post('/login', async (req, res) => {
         }
 });
  
+// Default temperature value
+let currentTemperature = 0;
 
-
-// Replace with your OpenWeatherMap API Key
-const WEATHER_API_KEY = process.env.WEATHER_API_KEY || 'f2c2661603d8f96757a81b3cfdd73892';
-
-// Helper function to fetch temperature
-async function fetchTemperature(city) {
+// Weather API call to get current temperature
+async function getWeather(city) {
+    const apiKey = process.env.WEATHER_API_KEY; // Add your API key in .env file
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+    
     try {
-        const response = await axios.get(
-            `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${WEATHER_API_KEY}&units=metric`
-        );
-        return response.data.main.temp;
+        const response = await axios.get(apiUrl);
+        return response.data.main.temp; // returns temperature in Celsius
     } catch (error) {
-        console.error('Error fetching temperature:', error);
+        console.error("Error fetching weather data:", error);
         return null;
     }
 }
+
+
 
 // Calculate water goal based on weight and temperature
 function calculateWaterGoal(weight, temperature) {
@@ -197,21 +203,26 @@ function calculateWaterGoal(weight, temperature) {
 
 // Route to calculate water goal based on location
 app.post('/calculator', async (req, res) => {
-    console.log("something");
+    const city = req.body.city; // User provides a city
+    const temperature = await getWeather(city); // Fetch temperature for the city
 
-    const {city} = req.body.city;
-
-    const temperature = await fetchTemperature(city);
-    if (temperature === null) {
-        console.log("Could not fetch temperature");
+    if (temperature !== null) {
+        currentTemperature = temperature;
+        console.log("Successfully set the temperature");
+    } else {
+        console.log('Failed to fetch weather data');
     }
 
-    // Replace with actual weight logic (e.g., stored in session or DB)
+   // Replace with actual weight logic (e.g., stored in session or DB)
     const userWeight = req.body.weight;
     const userInterval = req.body.interval;
-    const waterGoal = calculateWaterGoal(userWeight, temperature);
-    res.render('calculator',{waterGoalValue: waterGoal});
-});
+    const waterGoalValue = calculateWaterGoal(userWeight, currentTemperature);
+
+    res.render('reminder', { 
+        waterGoalValue: waterGoalValue, 
+        temperature: currentTemperature, 
+        interval: userInterval 
+    });});
 
 // Start the server
 app.listen(PORT, () => {
