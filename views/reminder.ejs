@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Water Reminder</title>
     <style>
-        /* Add basic styling for the page */
         body {
             font-family: Arial, sans-serif;
             text-align: center;
@@ -26,6 +25,19 @@
         .reminder-box p {
             font-size: 18px;
         }
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
@@ -33,25 +45,29 @@
     
     <div class="reminder-box">
         <p>Temperature: <strong><%= temperature %>°C</strong></p>
-        <p>Interval: <strong><%= interval %> minutes</strong></p>
-        <p>Water Goal: <strong><%= waterGoalValue %> mL</strong></p>
+        <p>Total Water Goal: <strong><%= waterGoalValue %> mL</strong></p>
+        <p>Reminder Interval: <strong><%= interval %> minutes</strong></p>
     </div>
 
     <button id="setReminderButton">Set Alarm Reminder</button>
 
     <script>
-        let intervalReminder = <%= interval %>*10; // Convert minutes to milliseconds
-        let waterGoalValueReminder = <%= waterGoalValue %>;
+        // Get the water goal and interval values from server-side EJS variables
+        let intervalMinutes = <%= interval %>; // Interval in minutes
+        let waterGoalValueReminder = <%= waterGoalValue %>; // Total water goal in mL
 
+        // Calculate the amount of water to drink at each interval
+        let intervalMilliseconds = intervalMinutes * 60000; // Convert minutes to milliseconds
+        let totalIntervals = Math.floor(1440 / intervalMinutes); // Assuming 24 hours in a day
+        let waterPerInterval = Math.floor(waterGoalValueReminder / totalIntervals);
 
-        // Set a timer to remind the user about their water intake
+        // Start the reminder system when the button is clicked
         document.getElementById('setReminderButton').addEventListener('click', function () {
+            alert('Water reminder system started! You will be reminded every ' + intervalMinutes + ' minutes.');
 
             setInterval(function () {
-                alert('Time to drink ' + waterGoalValueReminder + ' mL of water!');
-                // Play a sound or display an alarm notification if needed
-                new Audio('/Alarm-Clock-Sound.mp3').play(); // Assuming you have a sound file in your public directory
-            }, intervalReminder);
+                alert('Time to drink ' + waterPerInterval + ' mL of water!');
+            }, intervalMilliseconds);
         });
     </script>
 </body>

@@ -7,7 +7,6 @@ const axios = require('axios');
 const bodyParser = require('body-parser');
 const path = require('path');
 require('dotenv').config();
-const sound = require("sound-play");
 
 
 const app = express();
@@ -211,7 +210,7 @@ app.post('/calculator', async (req, res) => {
         console.log("Successfully set the temperature");
     } else {
         console.log('Failed to fetch weather data');
-    }
+    }   
 
    // Replace with actual weight logic (e.g., stored in session or DB)
     const userWeight = req.body.weight;
